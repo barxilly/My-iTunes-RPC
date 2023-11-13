@@ -187,7 +187,7 @@ namespace iTunes_RPC
 
         }
 
-        private void Settings_Click(object sender, EventArgs e)
+        private void Settings_Click_1(object sender, EventArgs e)
         {
             Settings settings = new Settings();
             settings.ShowDialog();
@@ -244,5 +244,12 @@ namespace iTunes_RPC
             var ei = new iTunesInfo();
             ei.previousSong();
         }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+ 
     }
 }

@@ -45,12 +45,10 @@ namespace iTunes_RPC
             songDurationLabel = new Label();
             songArtistLabel = new Label();
             songTitleLabel = new Label();
-            toolStrip1 = new ToolStrip();
-            Settings = new ToolStripButton();
             timer1 = new System.Windows.Forms.Timer(components);
+            settings = new Button();
             contextMenuStrip1.SuspendLayout();
             panel1.SuspendLayout();
-            toolStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // notifyIcon1
@@ -84,13 +82,13 @@ namespace iTunes_RPC
             // 
             // panel1
             // 
+            panel1.Controls.Add(settings);
             panel1.Controls.Add(backButton);
             panel1.Controls.Add(skipButton);
             panel1.Controls.Add(pausePlayButton);
             panel1.Controls.Add(songDurationLabel);
             panel1.Controls.Add(songArtistLabel);
             panel1.Controls.Add(songTitleLabel);
-            panel1.Controls.Add(toolStrip1);
             panel1.Location = new Point(0, -2);
             panel1.Name = "panel1";
             panel1.Size = new Size(360, 450);
@@ -165,30 +163,21 @@ namespace iTunes_RPC
             songTitleLabel.TabIndex = 1;
             songTitleLabel.TextAlign = ContentAlignment.BottomCenter;
             // 
-            // toolStrip1
-            // 
-            toolStrip1.ImageScalingSize = new Size(20, 20);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { Settings });
-            toolStrip1.Location = new Point(0, 0);
-            toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(360, 27);
-            toolStrip1.TabIndex = 0;
-            toolStrip1.Text = "toolStrip1";
-            // 
-            // Settings
-            // 
-            Settings.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            Settings.Image = Properties.Resources.Settings_L_icon;
-            Settings.ImageTransparentColor = Color.Magenta;
-            Settings.Name = "Settings";
-            Settings.Size = new Size(29, 24);
-            Settings.Text = "toolStripButton1";
-            Settings.Click += Settings_Click;
-            // 
             // timer1
             // 
             timer1.Interval = 1000;
             timer1.Tick += timer1_Tick;
+            // 
+            // settings
+            // 
+            settings.FlatStyle = FlatStyle.Popup;
+            settings.Location = new Point(3, 3);
+            settings.Name = "settings";
+            settings.Size = new Size(94, 29);
+            settings.TabIndex = 7;
+            settings.Text = "Settings";
+            settings.UseVisualStyleBackColor = true;
+            settings.Click += Settings_Click_1;
             // 
             // Form1
             // 
@@ -204,9 +193,6 @@ namespace iTunes_RPC
             Resize += Form1_Resize;
             contextMenuStrip1.ResumeLayout(false);
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            toolStrip1.ResumeLayout(false);
-            toolStrip1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -218,10 +204,8 @@ namespace iTunes_RPC
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem toolStripMenuItem2;
         private Panel panel1;
-        private ToolStrip toolStrip1;
-        private ToolStripButton Settings;
         private TextBox appID;
-        private Button button1;
+        private Button settings;
         private TextBox details;
         private System.Windows.Forms.Timer timer1;
         private Dictionary<string, int> song = new Dictionary<string, int>();
