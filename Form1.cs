@@ -116,7 +116,17 @@ namespace iTunes_RPC
                 });
 
                 // Set text
+                // Strip to 15 characters and add ellipsis
+                if (songName.Length > 40)
+                {
+                    songName = songName.Substring(0, 40) + "...";
+                }
                 songTitleLabel.Text = songName;
+                // Strip to 15 characters and add ellipsis
+                if (songArtist.Length > 20)
+                {
+                    songArtist = songArtist.Substring(0, 20) + "...";
+                }
                 songArtistLabel.Text = songArtist;
                 int songCurMin = songCurrentTime / 60;
                 int songCurSec = songCurrentTime % 60;

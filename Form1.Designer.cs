@@ -194,6 +194,9 @@ namespace iTunes_RPC
             contextMenuStrip1.ResumeLayout(false);
             panel1.ResumeLayout(false);
             ResumeLayout(false);
+            // Disable resizing and maximizing
+            MaximizeBox = false;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 
         #endregion
