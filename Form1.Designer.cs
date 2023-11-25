@@ -4,12 +4,43 @@ using System.Windows.Forms;
 
 namespace iTunes_RPC
 {
+
+    public class NewProgressBar : ProgressBar
+    {
+        public NewProgressBar()
+        {
+            this.SetStyle(ControlStyles.UserPaint, true);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            Rectangle rec = e.ClipRectangle;
+
+            rec.Width = (int)(rec.Width * ((double)Value / Maximum));
+            if (ProgressBarRenderer.IsSupported)
+                ProgressBarRenderer.DrawHorizontalBar(e.Graphics, e.ClipRectangle);
+            rec.Height = rec.Height;
+            e.Graphics.FillRectangle(Brushes.Red, 0, 0, rec.Width, rec.Height);
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            // Make background color half-transparent gray
+            using (SolidBrush brush = new SolidBrush(Color.FromArgb(128, 128, 128)))
+            {
+                e.Graphics.FillRectangle(brush, e.ClipRectangle);
+            
+            }
+        }
+    }
     partial class Form1
     {
         /// <summary>
         ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
+        private Color bg = Color.White;
 
         /// <summary>
         ///  Clean up any resources being used.
@@ -39,6 +70,10 @@ namespace iTunes_RPC
             toolStripMenuItem1 = new ToolStripMenuItem();
             toolStripMenuItem2 = new ToolStripMenuItem();
             panel1 = new Panel();
+            progressBar1 = new NewProgressBar();
+            minButton = new Button();
+            Xbutton = new Button();
+            settings = new Button();
             backButton = new Button();
             skipButton = new Button();
             pausePlayButton = new Button();
@@ -46,7 +81,6 @@ namespace iTunes_RPC
             songArtistLabel = new Label();
             songTitleLabel = new Label();
             timer1 = new System.Windows.Forms.Timer(components);
-            settings = new Button();
             contextMenuStrip1.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -82,6 +116,9 @@ namespace iTunes_RPC
             // 
             // panel1
             // 
+            panel1.Controls.Add(progressBar1);
+            panel1.Controls.Add(minButton);
+            panel1.Controls.Add(Xbutton);
             panel1.Controls.Add(settings);
             panel1.Controls.Add(backButton);
             panel1.Controls.Add(skipButton);
@@ -93,6 +130,56 @@ namespace iTunes_RPC
             panel1.Name = "panel1";
             panel1.Size = new Size(360, 450);
             panel1.TabIndex = 1;
+            panel1.MouseDown += Form1_MouseDown;
+            // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(41, 285);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(279, 14);
+            progressBar1.TabIndex = 2;
+            // 
+            // minButton
+            // 
+            minButton.AutoSize = true;
+            minButton.FlatAppearance.BorderSize = 0;
+            minButton.FlatStyle = FlatStyle.Flat;
+            minButton.Font = new Font("Wide Latin", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            minButton.Location = new Point(263, 14);
+            minButton.Name = "minButton";
+            minButton.Size = new Size(40, 40);
+            minButton.TabIndex = 9;
+            minButton.Text = "_";
+            minButton.UseVisualStyleBackColor = true;
+            minButton.Click += minButton_Click;
+            // 
+            // Xbutton
+            // 
+            Xbutton.AutoSize = true;
+            Xbutton.FlatAppearance.BorderSize = 0;
+            Xbutton.FlatStyle = FlatStyle.Flat;
+            Xbutton.Font = new Font("Yu Gothic UI Semibold", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            Xbutton.Location = new Point(309, 14);
+            Xbutton.Name = "Xbutton";
+            Xbutton.Size = new Size(40, 40);
+            Xbutton.TabIndex = 8;
+            Xbutton.Text = "X";
+            Xbutton.UseVisualStyleBackColor = true;
+            Xbutton.Click += Xbutton_Click;
+            // 
+            // settings
+            // 
+            settings.AutoSize = true;
+            settings.FlatAppearance.BorderSize = 0;
+            settings.FlatStyle = FlatStyle.Flat;
+            settings.Font = new Font("Yu Gothic UI Semibold", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            settings.Location = new Point(12, 14);
+            settings.Name = "settings";
+            settings.Size = new Size(96, 38);
+            settings.TabIndex = 7;
+            settings.Text = "Settings";
+            settings.UseVisualStyleBackColor = false;
+            settings.Click += Settings_Click_1;
             // 
             // backButton
             // 
@@ -100,7 +187,7 @@ namespace iTunes_RPC
             backButton.BackgroundImageLayout = ImageLayout.Stretch;
             backButton.FlatAppearance.BorderSize = 0;
             backButton.FlatStyle = FlatStyle.Flat;
-            backButton.Location = new Point(84, 260);
+            backButton.Location = new Point(84, 327);
             backButton.Name = "backButton";
             backButton.Size = new Size(60, 60);
             backButton.TabIndex = 6;
@@ -113,7 +200,7 @@ namespace iTunes_RPC
             skipButton.BackgroundImageLayout = ImageLayout.Stretch;
             skipButton.FlatAppearance.BorderSize = 0;
             skipButton.FlatStyle = FlatStyle.Flat;
-            skipButton.Location = new Point(216, 260);
+            skipButton.Location = new Point(216, 327);
             skipButton.Name = "skipButton";
             skipButton.Size = new Size(60, 60);
             skipButton.TabIndex = 5;
@@ -126,7 +213,7 @@ namespace iTunes_RPC
             pausePlayButton.BackgroundImageLayout = ImageLayout.Stretch;
             pausePlayButton.FlatAppearance.BorderSize = 0;
             pausePlayButton.FlatStyle = FlatStyle.Flat;
-            pausePlayButton.Location = new Point(150, 260);
+            pausePlayButton.Location = new Point(150, 327);
             pausePlayButton.Name = "pausePlayButton";
             pausePlayButton.Size = new Size(60, 60);
             pausePlayButton.TabIndex = 4;
@@ -135,9 +222,8 @@ namespace iTunes_RPC
             // 
             // songDurationLabel
             // 
-            songDurationLabel.BackColor = SystemColors.Control;
             songDurationLabel.Font = new Font("Segoe UI Black", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            songDurationLabel.Location = new Point(12, 215);
+            songDurationLabel.Location = new Point(12, 245);
             songDurationLabel.Name = "songDurationLabel";
             songDurationLabel.Size = new Size(337, 30);
             songDurationLabel.TabIndex = 3;
@@ -145,19 +231,18 @@ namespace iTunes_RPC
             // 
             // songArtistLabel
             // 
-            songArtistLabel.BackColor = SystemColors.Control;
             songArtistLabel.Font = new Font("Segoe UI Black", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            songArtistLabel.Location = new Point(12, 185);
+            songArtistLabel.Location = new Point(12, 215);
             songArtistLabel.Name = "songArtistLabel";
             songArtistLabel.Size = new Size(337, 30);
             songArtistLabel.TabIndex = 2;
+            songArtistLabel.Text = ".";
             songArtistLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // songTitleLabel
             // 
-            songTitleLabel.BackColor = SystemColors.Control;
             songTitleLabel.Font = new Font("Segoe UI Black", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            songTitleLabel.Location = new Point(12, 57);
+            songTitleLabel.Location = new Point(12, 87);
             songTitleLabel.Name = "songTitleLabel";
             songTitleLabel.Size = new Size(337, 128);
             songTitleLabel.TabIndex = 1;
@@ -168,35 +253,25 @@ namespace iTunes_RPC
             timer1.Interval = 1000;
             timer1.Tick += timer1_Tick;
             // 
-            // settings
-            // 
-            settings.FlatStyle = FlatStyle.Popup;
-            settings.Location = new Point(3, 3);
-            settings.Name = "settings";
-            settings.Size = new Size(94, 29);
-            settings.TabIndex = 7;
-            settings.Text = "Settings";
-            settings.UseVisualStyleBackColor = true;
-            settings.Click += Settings_Click_1;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(361, 450);
             Controls.Add(panel1);
+            FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "Form1";
             Text = "iTunes RPC";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
+            MouseDown += Form1_MouseDown;
             Resize += Form1_Resize;
             contextMenuStrip1.ResumeLayout(false);
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
-            // Disable resizing and maximizing
-            MaximizeBox = false;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 
         #endregion
@@ -218,5 +293,10 @@ namespace iTunes_RPC
         private bool isPaused = false;
         private Button skipButton;
         private Button backButton;
+        private Button Xbutton;
+        private Button minButton;
+        private NewProgressBar progressBar1;
     }
+
+
 }

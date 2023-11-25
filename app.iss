@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "iTunes Discord Rich Presence"
-#define MyAppVersion "1.1"
+#define MyAppVersion "1.3"
 #define MyAppPublisher "Barxilly"
 #define MyAppURL "https://barxilly.github.io/"
 #define MyAppExeName "iTunes RPC.exe"
@@ -23,7 +23,7 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputBaseFilename={#MyAppName} v{#MyAppVersion}
-SetupIconFile=C:\Users\Ben\Downloads\Blackvariant-Button-Ui-System-Apps-ITunes.ico
+SetupIconFile=Blackvariant-Button-Ui-System-Apps-ITunes.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
